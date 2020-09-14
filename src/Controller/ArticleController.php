@@ -81,6 +81,24 @@ return $this->render('articles/new.html.twig', array(
   }
 
   /**
+   * @Route("/article/delete/{id}")
+   * @Method({"DELETE"})
+   */
+
+  public function delete(Request $request, $id){
+    // Already explained in the save function
+    $article = $this->getDoctrine()->getRepository(Article::class)->find($id);
+
+    $entityManager = $this->getDoctrine()->getManager();
+    $entityManager->remove($article);
+    $entityManager->flush();
+
+    $response = new Response();
+    $response->send();
+  }
+
+
+  /**
    * 
    * @Route("/article/save")
    */
@@ -88,6 +106,7 @@ return $this->render('articles/new.html.twig', array(
    // Storing Articles in the DB
    // When you go to /article/save, it will automatically
    // Save a new article using doctrine to the mySQL DB. 
+   // I did not used it in this project. 
   public function save(){
     $entityManager = $this->getDoctrine()->getManager();
 
