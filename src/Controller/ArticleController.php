@@ -1,7 +1,6 @@
 <?php
 namespace App\Controller;
 
-
 // Importing Article file from Entity Folder
 // I am using it in the save function.
 use App\Entity\Article;
