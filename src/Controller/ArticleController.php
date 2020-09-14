@@ -70,6 +70,42 @@ return $this->render('articles/new.html.twig', array(
 ));
 }
 
+ /**
+   * @Route("/article/edit/{id}", name = "edit_article")
+   * Method({"GET", "POST"})
+   */
+  public function edit(Request $request, $id){
+    $article = new Article();
+    $article = $this->getDoctrine()->getRepository(Article::class)->find($id);
+
+    $form = $this->createFormBuilder($article)->add('title', TextType::class, array('attr'
+  => array('class' => 'form-control')
+  ))->add('body',TextareaType::class, array(
+    'required' => false,
+    'attr' => array('class' => 'form-control')
+  ))
+  ->add('save', submitType::class, array(
+    'label' => 'Update',
+    'attr' => array('class' => 'btn btn-primary my-3')
+  ))
+  ->getForm();
+  
+    $form->handleRequest($request);
+
+    if($form->isSubmitted() && $form->isValid()){
+
+      $entityManager = $this->getDoctrine()->getManager();
+      $entityManager->flush();
+
+      return $this->redirectToRoute('article_list');
+    }
+
+    return $this->render('articles/edit.html.twig', array(
+    'form' => $form->createView()
+));
+}
+
+
   /**
    * @Route("/article/{id}", name="article_show")
    */
